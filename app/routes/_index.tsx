@@ -14,12 +14,12 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
+  const method = request.method
   const formData = await request.formData()
-  const actionType = formData.get('action')
 
   const { DB } = context.cloudflare.env
 
-  if (actionType === 'delete') {
+  if (method === 'DELETE') {
     const id = formData.get('id')
     await DB.prepare('DELETE FROM todos WHERE id = ?;').bind(id).run()
     return redirect('/')
@@ -57,9 +57,8 @@ export default function Index() {
           className="flex items-center justify-between py-1 px-4 my-1 rounded-lg text-lg border bg-gray-100 text-gray-600 mb-2"
         >
           {todo.title}
-          <Form method="post">
+          <Form method="delete">
             <input type="hidden" name="id" value={todo.id} />
-            <input type="hidden" name="action" value="delete" />
             <button type="submit" className="font-medium">
               Delete
             </button>
