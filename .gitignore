@@ -1,5 +1,8 @@
 node_modules
 
+bun.lockb
+wrangler.toml
+
 /.cache
 /build
 .env
